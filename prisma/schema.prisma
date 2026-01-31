@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Market {
+  id            Int     @id @default(autoincrement())
+  slug          String? @unique // 市场 URL 标识
+  conditionId   String  @unique @map("condition_id") // 链上 Core ID
+  questionId    String  @map("question_id")
+  oracle        String
+  outcomeCount  Int     @map("outcome_count")
+  enableNegRisk Boolean @default(false) @map("enable_neg_risk")
+
+  // 预计算的 Token IDs (用于快速匹配交易)
+  yesTokenId String @unique @map("yes_token_id")
+  noTokenId  String @unique @map("no_token_id")
+
+  collateralToken String  @map("collateral_token")
+  title           String?
+  status          String  @default("active")
+
+  createdAt  DateTime  @map("created_at")
+  resolvedAt DateTime? @map("resolved_at")
+
+  trades             Trade[]
+  positionActivities PositionActivity[]
+  redemptions        Redemption[]
+
+  intelligence MarketIntelligence?
+
+  @@map("markets")
+}
+
+model Trade {
+  // 联合主键保证幂等性
+  txHash   String @map("tx_hash")
+  logIndex Int    @map("log_index")
+
+  marketId Int    @map("market_id")
+  market   Market @relation(fields: [marketId], references: [id])
+
+  tokenId String  @map("token_id")
+  outcome String? // "YES" or "NO"
+  side    String // "BUY" or "SELL"
+  price   Decimal @db.Decimal(10, 4) // USDC per share
+  size    Decimal @db.Decimal(18, 6) // Token quantity
+
+  maker     String
+  taker     String
+  timestamp DateTime
+
+  @@unique([txHash, logIndex])
+  @@index([marketId, timestamp]) // 优化查询
+  @@map("trades")
+}
+
+model SyncState {
+  key       String   @id
+  lastBlock BigInt   @map("last_block") // 使用 BigInt 防止溢出
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("sync_state")
+}
+
+// 1. 记录头寸变动：拆分(SPLIT)与合并(MERGE)
+model PositionActivity {
+  id       String @id @default(uuid())
+  txHash   String @map("tx_hash")
+  logIndex Int    @map("log_index")
+
+  marketId Int    @map("market_id")
+  market   Market @relation(fields: [marketId], references: [id])
+
+  user String // 执行拆分的用户（Stakeholder）
+  type String // "SPLIT" 或 "MERGE"
+
+  // 拆分/合并的抵押品（USDC）数量
+  amount Decimal @db.Decimal(18, 6)
+
+  timestamp DateTime
+
+  @@unique([txHash, logIndex])
+  @@index([marketId, user])
+  @@map("position_activities")
+}
+
+model Redemption {
+  id        String   @id @default(uuid())
+  txHash    String   @map("tx_hash")
+  logIndex  Int      @map("log_index")
+  marketId  Int      @map("market_id")
+  market    Market   @relation(fields: [marketId], references: [id])
+  user      String // 领取人
+  payout    Decimal  @db.Decimal(18, 6) // 领到的 USDC 数量
+  timestamp DateTime
+
+  @@unique([txHash, logIndex])
+  @@map("redemptions")
+}
+
+// 3. 负风险转换记录 (NO -> YES 转换)
+model PositionConversion {
+  id           String   @id @default(uuid())
+  txHash       String   @map("tx_hash")
+  logIndex     Int      @map("log_index")
+  user         String
+  fromMarketId Int      @map("from_market_id")
+  toMarketId   Int      @map("to_market_id")
+  amount       Decimal  @db.Decimal(18, 6)
+  timestamp    DateTime
+
+  @@unique([txHash, logIndex])
+  @@map("position_conversions")
+}
+
+// 存储 AI 对市场的深度分析
+model MarketIntelligence {
+  id       Int    @id @default(autoincrement())
+  marketId Int    @unique @map("market_id")
+  market   Market @relation(fields: [marketId], references: [id])
+
+  narrative     String  @db.Text // AI 生成的市场背景与局势解析
+  aiProbability Float? // AI 推算的真实胜率 (0-1)
+  riskScore     Int // 风险评分 (1-100)
+  sentiment     String? // 情绪: Bullish, Bearish, Neutral
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("market_intelligence")
+}
+
+// 存储 AI 对大额交易的实时点评
+model TradeInsight {
+  txHash     String   @id
+  marketId   Int
+  commentary String   @db.Text // AI 对这笔交易的意图解析
+  impact     String // 影响: "Bullish", "Bearish", "Neutral"
+  createdAt  DateTime @default(now())
+
+  @@map("trade_insights")
+}
+
+model TraderProfile {
+  address     String   @id
+  tags        String[] // 例如: ["Whale", "Smart Money", "Early Bird"]
+  aiPersona   String?  @db.Text // AI 生成的交易者描述
+  winRate     Float? // 估算胜率
+  totalVolume Decimal  @db.Decimal(18, 6)
+  lastSeen    DateTime @updatedAt
+
+  @@map("trader_profiles")
+}

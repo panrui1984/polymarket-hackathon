@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,8 +18,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./", // 必须设为项目根目录（关键！）
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"], // 原有：src 目录别名，不变
+      "~/*": ["./*"]      // 新增：项目根目录别名，~/* 对应 根目录/*
+      // 也可以用 #/*: ["./*"]，根据个人习惯选
     }
   },
   "include": [
