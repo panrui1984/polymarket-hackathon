@@ -1,4 +1,3 @@
-// src/market-syncer.ts
 import { gammaService } from '@/services/gammas';
 import { calTokenId } from '../utils';
 import { CONFIG } from '../config';
@@ -16,7 +15,7 @@ export async function syncMarkets() {
       const markets = await gammaService.getMarkets({
         limit: BATCH_SIZE,
         offset: offset,
-        closed: false, // 只抓未关闭的市场
+        closed: false,
       });
 
       if (!markets || markets.length === 0) {
@@ -52,7 +51,6 @@ export async function syncMarkets() {
           //   continue;
           // }
 
-          // --- 入库逻辑 (保持不变) ---
           await prisma.market.upsert({
             where: { conditionId: m.conditionId },
             create: {
@@ -96,7 +94,7 @@ export async function syncMarkets() {
         console.log(`✅ Reached end of list. Total synced: ${totalSynced}`);
       } else {
         offset += BATCH_SIZE;
-        // 关键：稍微休息一下，避免触发 429 Rate Limit
+        // 避免触发 429 Rate Limit
         await sleep(200);
       }
     }

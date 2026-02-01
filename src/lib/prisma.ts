@@ -3,7 +3,6 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import 'dotenv/config';
 
-// 1. 处理 BigInt 序列化 (Prisma 7.x 必须手动处理，否则 API 会崩溃)
 if (typeof BigInt !== 'undefined') {
   (BigInt.prototype as any).toJSON = function () {
     return this.toString();

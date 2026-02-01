@@ -33,7 +33,6 @@ export default function GeminiSearch() {
   return (
     <div className="mx-auto mb-10 w-full max-w-4xl">
       <div className="group relative">
-        {/* 渐变边框效果 */}
         <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur transition duration-1000 group-hover:opacity-40"></div>
 
         <form

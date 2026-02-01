@@ -164,7 +164,6 @@ export default async function MarketDetailPage({
             <BarChart3 className="absolute -top-10 -right-10 -z-0 h-64 w-64 text-slate-50" />
           </div>
 
-          {/* 2. 深度分析：情绪仪表盘 + 巨鲸哨兵 */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* 情绪盘 */}
             <div className="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm">
@@ -240,7 +239,7 @@ export default async function MarketDetailPage({
             </div>
           </div>
 
-          {/* 3. 实时交易流水（集成 AI画像） */}
+          {/* 3. 实时交易流水*/}
           <div className="overflow-hidden rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-50 bg-slate-50/30 px-8 py-6">
               <h3 className="flex items-center gap-2 text-sm font-black tracking-widest text-slate-800 uppercase">
@@ -295,7 +294,7 @@ export default async function MarketDetailPage({
           </div>
         </div>
 
-        {/* 右侧栏 (4 columns): 合约详情与操作 */}
+        {/* 合约详情与操作 */}
         <div className="space-y-6 lg:col-span-4">
           {/* 实时报价卡片 */}
           <div className="rounded-[3rem] bg-[#6366f1] p-10 text-white shadow-2xl shadow-indigo-200">

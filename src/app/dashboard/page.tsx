@@ -16,9 +16,9 @@ import {
   BrainCircuit,
   LogOut,
 } from 'lucide-react';
-import DashboardHeader from '@/components/DashboardHeader'; // 引入新组件
-import GeminiSearch from '@/components/GeminiSearch'; // 导入新组件
-// --- 辅助工具函数 ---
+import DashboardHeader from '@/components/DashboardHeader';
+import GeminiSearch from '@/components/GeminiSearch'; 
+
 const formatCurrency = (val: number) =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -65,11 +65,9 @@ async function getDashboardData(page: number, pageSize: number) {
   return { markets, totalCount, activeCount, totalPages };
 }
 
-// --- 主页面组件 ---
 export default async function DashboardPage(props: {
   searchParams: Promise<{ page?: string; pageSize?: string }>;
 }) {
-  // Next.js 15 必须使用 await 处理 searchParams
   const searchParams = await props.searchParams;
   const currentPage = Math.max(1, parseInt(searchParams.page || '1'));
   const pageSize = Math.max(10, parseInt(searchParams.pageSize || '20'));
@@ -175,7 +173,6 @@ export default async function DashboardPage(props: {
                           </span>
                         </Link>
 
-                        {/* --- 🌟 Gemini AI 诊断框 --- */}
                         {m.intelligence && (
                           <div className="mt-3 flex items-start gap-2 rounded-xl border border-blue-100/30 bg-gradient-to-br from-blue-500/[0.03] to-purple-500/[0.03] p-3">
                             <div className="flex-shrink-0 rounded-md bg-indigo-600 p-1">
@@ -255,7 +252,6 @@ export default async function DashboardPage(props: {
           </table>
         </div>
 
-        {/* 5. Pagination Footer */}
         <div className="flex flex-col items-center justify-between gap-6 border-t border-slate-50 bg-slate-50/20 px-10 py-8 sm:flex-row">
           <div className="text-sm font-black text-slate-400">
             PAGE <span className="text-slate-900">{currentPage}</span> /{' '}
@@ -312,9 +308,6 @@ export default async function DashboardPage(props: {
     </div>
   );
 }
-
-// --- 封装 UI 子组件 ---
-
 function StatCard({ title, value, icon, color }: any) {
   return (
     <div className="flex items-center justify-between rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm transition-all duration-300 hover:translate-y-[-4px]">

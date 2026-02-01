@@ -41,15 +41,7 @@ export async function handleOrderFilled(
   } else {
     return null; // 忽略非 USDC 交易
   }
-  console.log('解析  ');
-  console.log(
-    makerAssetId,
-    takerAssetId,
-    makerAmountFilled,
-    takerAmountFilled,
-    maker,
-    taker
-  );
+ 
   // 获取市场信息
   let marketInfo = cache.get(tokenId);
   console.log(marketInfo);
@@ -73,13 +65,11 @@ export async function handleOrderFilled(
     }
   }
 
-  // 计算数值
   const sizeVal = Number(formatUnits(tokenRawAmount, 6));
   const usdcVal = Number(formatUnits(usdcRawAmount, 6));
   if (sizeVal === 0) return null;
   const priceVal = usdcVal / sizeVal;
 
-  // 返回 Trade 数据对象（不在此处执行写入，以便主循环批量处理）
   return {
     txHash: transactionHash,
     logIndex: Number(logIndex),

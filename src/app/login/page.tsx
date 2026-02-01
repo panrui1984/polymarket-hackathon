@@ -44,10 +44,10 @@ export default function LoginPage() {
             <BarChart3 size={28} />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
-            Polymarket Indexer
+            Polymarket Data Dashboard 
           </h1>
           <p className="mt-2 text-sm text-zinc-400">
-            Sign in to manage on-chain data
+           
           </p>
         </div>
 
@@ -108,7 +108,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-8 text-center text-xs tracking-widest text-zinc-500 uppercase">
-          Secured Indexer Access
+          Secured Access
         </p>
       </div>
     </div>
