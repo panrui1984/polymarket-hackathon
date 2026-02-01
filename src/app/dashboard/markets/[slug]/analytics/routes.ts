@@ -15,7 +15,6 @@ export async function GET(
   if (!market)
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  // 1. 获取过去 24 小时的所有成交
   const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const trades = await prisma.trade.findMany({
     where: { marketId: market.id, timestamp: { gte: last24h } },

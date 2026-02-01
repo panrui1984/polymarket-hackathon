@@ -24,5 +24,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/dashboard/:path*', '/login'],
+  matcher: [ '/((?!api|_next/static|_next/image|favicon.ico|docs|api-docs).*)',],
 };

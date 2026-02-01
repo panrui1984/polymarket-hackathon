@@ -108,7 +108,7 @@ export default async function MarketDetailPage({
             size={14}
             className="transition-transform group-hover:-translate-x-1"
           />{' '}
-          BACK TO TERMINAL
+          返回
         </Link>
         <div className="flex items-center gap-3">
           <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase">
@@ -146,15 +146,15 @@ export default async function MarketDetailPage({
                   </p>
                   <div className="grid grid-cols-3 gap-8 border-t border-indigo-400/30 pt-6">
                     <InsightStat
-                      label="AI Prob"
+                      label="AI 概率"
                       value={`${Math.round((market.intelligence.aiProbability || 0) * 100)}%`}
                     />
                     <InsightStat
-                      label="Risk Score"
+                      label="风险评分"
                       value={`${market.intelligence.riskScore}/100`}
                     />
                     <InsightStat
-                      label="Sentiment"
+                      label="市场情绪"
                       value={market.intelligence.sentiment || 'Neutral'}
                     />
                   </div>
@@ -169,8 +169,7 @@ export default async function MarketDetailPage({
             <div className="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm">
               <div className="mb-6 flex items-center justify-between">
                 <h3 className="flex items-center gap-2 text-xs font-black tracking-widest text-slate-400 uppercase">
-                  <Activity size={16} className="text-[#6366f1]" /> Market
-                  Sentiment
+                  <Activity size={16} className="text-[#6366f1]" /> 市场情绪
                 </h3>
                 <Zap size={16} className="text-amber-400" />
               </div>
@@ -209,8 +208,7 @@ export default async function MarketDetailPage({
             {/* 巨鲸监测 */}
             <div className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 text-white shadow-xl shadow-slate-200">
               <h3 className="mb-6 flex items-center gap-2 text-xs font-black tracking-widest text-slate-500 uppercase">
-                <ShieldAlert size={16} className="text-amber-400" /> Whale
-                Activity Monitor
+                <ShieldAlert size={16} className="text-amber-400" /> 巨鲸监测
               </h3>
               <div className="relative z-10 space-y-3">
                 {whaleTrades.length > 0 ? (
@@ -232,7 +230,7 @@ export default async function MarketDetailPage({
                   ))
                 ) : (
                   <div className="py-4 text-center text-xs font-bold text-slate-500">
-                    No whale trades detected in current batch
+                    未探测到巨鲸活动
                   </div>
                 )}
               </div>
@@ -328,8 +326,7 @@ export default async function MarketDetailPage({
           {/* 合约规范 */}
           <div className="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm">
             <h3 className="mb-6 flex items-center gap-2 text-xs font-black tracking-widest text-slate-400 uppercase">
-              <ShieldCheck size={16} className="text-emerald-500" /> Contract
-              Specs
+              <ShieldCheck size={16} className="text-emerald-500" /> 合约详情
             </h3>
             <div className="space-y-5">
               <SpecRow label="Condition ID" value={market.conditionId} isMono />
