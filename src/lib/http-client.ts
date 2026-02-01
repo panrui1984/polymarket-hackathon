@@ -6,9 +6,6 @@ import axios, {
 } from 'axios';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 
-/**
- * 通用 HTTP 客户端配置接口
- */
 interface HttpClientConfig extends AxiosRequestConfig {
   retryConfig?: IAxiosRetryConfig;
 }

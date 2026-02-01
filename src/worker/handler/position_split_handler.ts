@@ -12,7 +12,6 @@ export async function handlePositionSplit(log: any, timestamp: Date) {
 
   if (!market) {
     // 如果找不到市场，说明该 Condition 可能还未被我们的 Syncer 录入
-    // 这种情况下可以记录一个警告日志，或者尝试触发一次 Market Discovery
     console.warn(`[Split] Market not found for conditionId: ${conditionId}`);
     return;
   }
@@ -35,7 +34,7 @@ export async function handlePositionSplit(log: any, timestamp: Date) {
         amount: new Prisma.Decimal(formatUnits(amount, 6)),
         timestamp: timestamp,
       },
-      update: {}, // 幂等处理
+      update: {}, 
     });
 
     console.log(

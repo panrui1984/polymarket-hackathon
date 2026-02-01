@@ -24,7 +24,7 @@ export default function GeminiSearch() {
       const data = await res.json();
       setAnswer(data.answer);
     } catch (err) {
-      setAnswer('抱歉，Gemini 暂时无法处理您的请求。');
+      setAnswer('Gemini 暂时无法处理您的请求。');
     } finally {
       setLoading(false);
     }

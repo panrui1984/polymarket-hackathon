@@ -38,14 +38,14 @@ async function startWorker() {
         console.error('❌ Gemini Sentinel Task Failed:', e);
       }
     };
-    // 延迟 30 秒启动 AI，确保 Market 和 Trade 已经抓取了一部分数据
+    
     setTimeout(async () => {
       await runAITask();
       setInterval(runAITask, 1000 * 60 * 15); // 每 15 分钟分析一次
     }, 30000);
-    // 2. 交易索引任务 (死循环)
-    // console.log("🚀 Starting Trade Indexer Loop...");
-    // await startIndexer();
+    // 3. 交易索引任务 
+    console.log("🚀 Starting Trade Indexer Loop...");
+    await startIndexer();
   } catch (err) {
     console.error('❌ Worker Crashed:', err);
     await prisma.$disconnect();
